@@ -1,6 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,6 +10,7 @@ class Settings(BaseSettings):
 
     github_app_id: str = ""
     github_app_private_key_path: str = "./github-app-private-key.pem"
+    github_app_private_key_raw: str = Field(default="", validation_alias="GITHUB_APP_PRIVATE_KEY")
     github_webhook_secret: str = ""
 
     llm_api_key: str = ""
@@ -23,6 +25,9 @@ class Settings(BaseSettings):
 
     @property
     def github_app_private_key(self) -> str:
+        # Prefer env var (cloud deploy) over file path (local dev)
+        if self.github_app_private_key_raw:
+            return self.github_app_private_key_raw
         return Path(self.github_app_private_key_path).read_text()
 
 
