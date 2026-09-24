@@ -1,0 +1,9 @@
+diff --git a/api/orders.py b/api/orders.py
+index 1111111..2222222 100644
+--- a/api/orders.py
++++ b/api/orders.py
+@@ -10,3 +10,3 @@ def get_order(oid):
+     cur = conn.cursor()
+-    cur.execute("SELECT * FROM orders WHERE id=%s", (oid,))
++    cur.execute(f"SELECT * FROM orders WHERE id={oid}")
+     return cur.fetchone()
